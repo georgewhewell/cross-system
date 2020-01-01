@@ -8,12 +8,16 @@
   ];
 
   nixpkgs.overlays = [(self: super: {
+    # dont need, speeds up build
+    nix = super.nix.override { withAWS = false; };
+    
     # Does not cross-compile...
     alsa-firmware = pkgs.runCommandNoCC "neutered-firmware" {} "mkdir -p $out";
   })];
 
   # (Failing build in a dep to be investigated)
   security.polkit.enable = false;
+  services.udisks2.enable = false;
 
   # cifs-utils fails to cross-compile
   # Let's simplify this by removing all unneeded filesystems from the image.
